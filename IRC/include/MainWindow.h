@@ -10,9 +10,6 @@
 #include "Input.h"
 #include "readinit.h"
 
-#ifdef SERVER_ON
-#include "Serverstuff.h"
-#endif
 
 class MainWindow
 {
@@ -22,9 +19,7 @@ private:
 	FileWriting *pFileWriting;
 	IncomingMessagesHandling *pIncomingMessagesHandling;
 	Input *pInput;
-#ifdef SERVER_ON
-	ServerCF *pServer;
-#endif
+
 
 protected:
 	HINSTANCE pInstance;
@@ -37,11 +32,11 @@ protected:
 
 
 public:
-	MainWindow::MainWindow(HINSTANCE g_pInstance, HWND g_pWindow);
+	MainWindow(HINSTANCE g_pInstance, HWND g_pWindow);
 	~MainWindow();
 	void InitProgram();
-	void MainWindow::OutputInternalMessage(char *msg);
-	void MainWindow::OutputMessage(Message *msg);
+	void OutputInternalMessage(char *msg);
+	void OutputMessage(Message *msg);
 	void DrawAll();
 	void ReadMessage();
 	SOCKET GetSocket();

@@ -10,12 +10,12 @@ class Input
 private:
 	char *msg2;
 	int length;
-	void Input::SendPrivMsg(Message *msg);
-	void Input::SendMeMsg(Message *msg);
-	void Input::SelectChannel(char *msg3);
-	void Input::RemoveCommandString(char *msg3);
-	void Input::CloseChannel(char *msg3);
-	void Input::InputCommands(Message *msg);
+	void SendPrivMsg(Message *msg);
+	void SendMeMsg(Message *msg);
+	void SelectChannel(char *msg3);
+	void RemoveCommandString(char *msg3);
+	void CloseChannel(char *msg3);
+	void InputCommands(Message *msg);
 
 public:
 	Input();

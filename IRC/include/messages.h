@@ -42,8 +42,8 @@ public:
 	int GetUnread();
 	void CopyCurrentLine();
 	char *GetCurrentLine();
-	bool MessageBoxCF::IsQueueEmptyOrAlmostEmpty();
-	bool MessageBoxCF::DisplayingNewestMessage();
+	bool IsQueueEmptyOrAlmostEmpty();
+	bool DisplayingNewestMessage();
 	void AddName(char *name);
 	void RemoveNameIfExists(char *name);
 	void DisplayUserList();

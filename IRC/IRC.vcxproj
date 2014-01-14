@@ -37,7 +37,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\boost\boost_1_51\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)IRC\include\;$(IncludePath)</IncludePath>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>

@@ -18,7 +18,7 @@ public:
 	~Message();
 	bool GetNUHStatus();
 	char *GetFormatedMessage();
-	void Message::MergeParameterArray(int begin = 0, int end = 0);
+	void MergeParameterArray(int begin = 0, int end = 0);
 
 	//fuck it
 	bool HasNickUserHost;

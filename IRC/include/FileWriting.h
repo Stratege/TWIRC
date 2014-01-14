@@ -17,7 +17,7 @@ public:
 	void WriteNickname(char *msgToWriteInto, char *Nickname);
 	void WriteMessage(char *msgToWriteInto, char *originalMsgToFilter);
 
-	void FileWriting::PrintOutputToFile(char *PrintChannelName,char *msg); /// \fn Prints msg into File specified by PrintName.
+	void PrintOutputToFile(char *PrintChannelName,char *msg); /// \fn Prints msg into File specified by PrintName.
 	FileWriting(char *givenDirectory);
 	~FileWriting();
 };
