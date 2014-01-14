@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IRC", "IRC\IRC.vcxproj", "{07FEB863-7A48-48EB-9164-F0EB40372E1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07FEB863-7A48-48EB-9164-F0EB40372E1B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{07FEB863-7A48-48EB-9164-F0EB40372E1B}.Debug|Win32.Build.0 = Debug|Win32
+		{07FEB863-7A48-48EB-9164-F0EB40372E1B}.Release|Win32.ActiveCfg = Release|Win32
+		{07FEB863-7A48-48EB-9164-F0EB40372E1B}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

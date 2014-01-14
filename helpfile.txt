@@ -1,0 +1,13 @@
+read the config.ini it contains all the startup information
+
+commands are partially case sensitive (if they aren't for passing through) - this means /Select is okay but /SelECT isn't
+
+Channels can be switched and opened (not joined!) via /select channelname or /s channelname - this also includes queries (and is, infact the main purpose)
+
+Text can be scrolled with up/down arrow, page up/down and pos1/last buttons.
+Channels can be scrolled via ctrl+up/down arrow
+
+To close a channel, type /close channelname or /c channelname
+To close every channel, type /closeall
+
+To copy  the lowest visible line into the clipboard, type /copy
