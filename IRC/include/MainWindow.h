@@ -40,14 +40,14 @@ public:
 	void DrawAll();
 	void ReadMessage();
 	SOCKET GetSocket();
-	char *MainWindow::GetSelectedChannelName();
+	char *GetSelectedChannelName();
 	void SocketClosedMessage();
 	void SendMessage(char *msg);
 	void SelectChannel(char *Name);
 	void CloseChannel(char *Name);
 	void CloseAll();
-	void MainWindow::ScrollChannelUp(int Lines);
-	void MainWindow::ScrollChannelDown(int Lines);
+	void ScrollChannelUp(int Lines);
+	void ScrollChannelDown(int Lines);
 	void ScrollUp(char *ChannelName, int Lines);
 	void ScrollDown(char *ChannelName, int Lines);
 	void ScrollToStart(char *ChannelName);

@@ -35,8 +35,8 @@ public:
 	char *GetSelectedChannelName();
 	void DrawSelected();
 	void DrawChannellist();
-	void ChannelHandler::ScrollChannelUp(int Lines);
-	void ChannelHandler::ScrollChannelDown(int Lines);
+	void ScrollChannelUp(int Lines);
+	void ScrollChannelDown(int Lines);
 	void ScrollUp(char *ChannelName, int Lines);
 	void ScrollDown(char *ChannelName, int Lines);
 	void ScrollToStart(char *ChannelName);
