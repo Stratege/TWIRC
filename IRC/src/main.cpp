@@ -313,7 +313,10 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR pCommandLin
 
 	int iHeight = 800;
 	int iWidth = 1000;
-	_tzset();
+
+	//sets time stuff
+	tzset();
+
 
 	try
 	{

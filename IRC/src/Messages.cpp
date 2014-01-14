@@ -318,7 +318,7 @@ void MessageBoxCF::CopyCurrentLine()
 //possibly relevant for a different bug (the reason why the workaround was required
 char *MessageBoxCF::GetCurrentLine()
 {
-	if(MessageQueue->_Mysize != 0)
+	if(MessageQueue->size() != 0)
 	{
 		return *BottomMostDisplayedMessage;
 	}else{

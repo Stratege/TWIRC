@@ -38,9 +38,9 @@ public:
 	char *GetSavepath();
 	char *GetServeraddress();
 	short GetPort();
-	int ReadInit::GetWindowHeight();
-	int ReadInit::GetWindowWidth();
-	int ReadInit::GetBackgroundColor();
+	int GetWindowHeight();
+	int GetWindowWidth();
+	int GetBackgroundColor();
 
 	MessageBoxCF *MessagesToExecute;
 

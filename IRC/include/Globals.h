@@ -25,6 +25,9 @@
 #if _MSC_VER
 #define snprintf sprintf_s
 #define strncpy(dest,source,size) strcpy_s(dest,size,source)
+
+#define strtime(time) _strtime(time)
+#define strdate(time) _strdate(time)
 #endif
 
 

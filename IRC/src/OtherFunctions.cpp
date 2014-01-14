@@ -1,11 +1,14 @@
 #include "OtherFunctions.h"
 #include "FindFunctions.h"
 
+
+
+
 bool GetTimeAndDate()
 {
 	//sets the global variables of time and date via system time
-	if(!_strtime(CurrentTime))
-		if(!_strdate(CurrentDate))
+	if(!strtime(CurrentTime))
+		if(!strdate(CurrentDate))
 		{
 			//now we do some swapping
 			//because we get mm/dd/yyyy

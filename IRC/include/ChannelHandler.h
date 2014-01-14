@@ -17,7 +17,7 @@ private:
 	std::list<MessageBoxCF *> *ChannelList; /// \var Contains the Channels
 	MessageBoxCF *SelectedChannel; /// \var The currently selected Channel
 	void RedrawAllIfChannelSelected(char *ChannelName);
-	std::list<MessageBoxCF *>::iterator ChannelHandler::FindChannelIteratorByName(char *Name);
+	std::list<MessageBoxCF *>::iterator FindChannelIteratorByName(char *Name);
 	void SelectChannel(MessageBoxCF *NewChannel);
 	int height;
 	int width;

@@ -205,7 +205,7 @@ void ChannelHandler::DrawSelected()
 
 void ChannelHandler::ScrollChannelUp(int Lines)
 {
-	std::list<MessageBoxCF *>::iterator CurrentChannelIter = ChannelHandler::FindChannelIteratorByName(this->SelectedChannel->GetName());
+	std::list<MessageBoxCF *>::iterator CurrentChannelIter = FindChannelIteratorByName(this->SelectedChannel->GetName());
 	if(ChannelList->begin() != CurrentChannelIter)
 	{
 		CurrentChannelIter--;
@@ -215,7 +215,7 @@ void ChannelHandler::ScrollChannelUp(int Lines)
 
 void ChannelHandler::ScrollChannelDown(int Lines)
 {
-	std::list<MessageBoxCF *>::iterator CurrentChannelIter = ChannelHandler::FindChannelIteratorByName(this->SelectedChannel->GetName());
+	std::list<MessageBoxCF *>::iterator CurrentChannelIter = FindChannelIteratorByName(this->SelectedChannel->GetName());
 	CurrentChannelIter++;
 	if(CurrentChannelIter == ChannelList->end())
 	{
