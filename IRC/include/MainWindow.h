@@ -34,6 +34,7 @@ protected:
 public:
 	MainWindow(HINSTANCE g_pInstance, HWND g_pWindow);
 	~MainWindow();
+	bool OpenConnection();
 	void InitProgram();
 	void OutputInternalMessage(char *msg);
 	void OutputMessage(Message *msg);

@@ -5,7 +5,7 @@
 #include <vector>
 
 
-bool GetTimeAndDate();
+//bool GetTimeAndDate();
 char *charAllocAndSectionCopy(char *msg, int length = 0, int extralength = 0);
 int CopyTillSymbol(char **target, char *source, char symbol);
 int CopyTillSymbolIfNotOtherSymbolFirst(char **target, char *source, char symbol, char othersymbol);

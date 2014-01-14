@@ -233,24 +233,11 @@ void IncomingMessagesHandling::OutputHandling()
 			pMainWindow->OutputInternalMessage("INTERNAL_MESSAGE Timer could not be set");
 		}
 	}
-	switch (count)
-	{
-		case 2:
-//		                std::cout << send(testSocket,"PASS test\r\n",15,0) << std::endl;
-			snprintf(msg,99,"NICK %s\r\n",nick);
-			//std::cout << 
-			send(pMainWindow->GetSocket(),msg,strlen(msg),0); // << std::endl;
-			snprintf(msg,99,"USER %s 0 * :%s\r\n",user,realname);
-			//std::cout << 
-				send(pMainWindow->GetSocket(),msg,strlen(msg),0); //<< std::endl;
-		break;
-		case 10:
+	if(count == 10){
 			pMainWindow->pReadInit->loadVars();
 			pMainWindow->pReadInit->loadVars();
 			pMainWindow->pReadInit->MessagesToExecute->ScrollToEnd();
 //			std::cout << send(testSocket,msg,strlen(msg),0) << std::endl;
-		default:
-		break;
 	}
 
 	if(!pMainWindow->pReadInit->MessagesToExecute->IsQueueEmpty())

@@ -52,26 +52,30 @@ MainWindow::~MainWindow()
 	delete(pReadInit);
 }
 
-void MainWindow::InitProgram()
+bool MainWindow::OpenConnection()
 {
 	if(pSocket->OpenConnection("IRC",this->pReadInit->GetServeraddress(),this->pReadInit->GetPort()))
 	{
-		MSG msg;
-		this->SendMessage("random msg to prod the thing into action");
-		while(GetMessage(&msg, NULL, 0, 0))
-	    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-	   }
-/*
-		//starting up input
-		boost::thread InputThread = boost::thread(SendTheBloodyMessage);
-		
-		pIncomingMessagesHandling->OutputHandling();
+		char startingMessage[600];
+		snprintf(startingMessage,600,"/USER %s 0 *: %s\r\n",this->pReadInit->GetUser(),this->pReadInit->GetRealname());
+		this->SendMessage(startingMessage);
+		snprintf(startingMessage,600,"/NICK %s\r\n",this->pReadInit->GetNick());
+		this->SendMessage(startingMessage);
+		return true;
+	}
+	return false;
+}
 
-		//ending
-		InputThread.join();
-		*/
+void MainWindow::InitProgram()
+{
+
+	if(OpenConnection()){
+		MSG msg;
+		while(GetMessage(&msg, NULL, 0, 0))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 	}
 }
 
@@ -229,7 +233,7 @@ void MainWindow::SocketClosedMessage()
 	//as soon as it is implemented, this should probably also reopen all channels and do an identify - though that might already be handled then via the ResetCount() call.
 	//the above concern has been handled
 	this->pIncomingMessagesHandling->ResetCount();
-	this->pSocket->OpenConnection("IRC",this->pReadInit->GetServeraddress(),this->pReadInit->GetPort());
+	this->OpenConnection();
 }
 
 void MainWindow::SendMessage(char *msg)

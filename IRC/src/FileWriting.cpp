@@ -4,15 +4,12 @@
 
 void FileWriting::WriteTimeAndDate(char *msgToWriteInto)
 {
-	if(GetTimeAndDate())
-	{
-		//writes in the style of: "date time - "
-		snprintf(msgToWriteInto,650,"%s %s - ",CurrentTime, CurrentDate);
-	}else
-	{
-		//couldn't get the time, write "-1 - "
-		snprintf(msgToWriteInto,650,"-1 - ",msgToWriteInto);
-	}
+	time_t rawtime;
+	struct tm * timeinfo;
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+	//writes in the style of: "hh:mm:ss dd.mm.yy - "
+	strftime(msgToWriteInto,650,"%H:%M:%S %d.%m.%y - ",timeinfo);
 }
 
 void FileWriting::WriteNickname(char *msgToWriteInto, char *Nickname)

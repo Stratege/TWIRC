@@ -6,9 +6,11 @@
 
 bool GetTimeAndDate()
 {
+
+
 	//sets the global variables of time and date via system time
-	if(!strtime(CurrentTime))
-		if(!strdate(CurrentDate))
+	if(!_strtime_s(CurrentTime,10))
+		if(!_strdate_s(CurrentDate,10))
 		{
 			//now we do some swapping
 			//because we get mm/dd/yyyy

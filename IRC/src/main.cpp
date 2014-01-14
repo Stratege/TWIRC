@@ -315,7 +315,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR pCommandLin
 	int iWidth = 1000;
 
 	//sets time stuff
-	tzset();
+	//_tzset();
 
 
 	try
