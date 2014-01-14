@@ -14,6 +14,8 @@ private:
 	RECT ChannelListRect;
 	HDC tempBufferHDC;
 	HBITMAP tempBufferBitmap;
+	int TextColor;
+	int BackgroundColor;
 
 public:
 	DrawingHandler(void);
@@ -28,6 +30,7 @@ public:
 	void SetNewBackgroundColor(int Color);
 	void AddMessage(char *Message, bool Channel);
 
+	void Resize(int newWidth, int newHeight);
 };
 
 

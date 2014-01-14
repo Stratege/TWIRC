@@ -3,4 +3,6 @@
 /IRC/Debug
 /IRC/Release
 /ipch
-/IRC/config.ini
+/IRC/*.ini
+*.sdf
+

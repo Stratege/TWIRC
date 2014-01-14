@@ -21,7 +21,6 @@ public:
 	Input();
 	~Input();
 	void SendMessage(char *msg);
-	void KeyDown(char Key);
 };
 
 #endif

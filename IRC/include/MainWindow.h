@@ -60,6 +60,8 @@ public:
 	void RemoveNick(char *Nick, char *Channel = NULL);
 	void ShowUserList();
 
+	void Resize(int newWidth, int newHeight);
+
 	void SwapBuffers();
 
 	ReadInit *pReadInit;

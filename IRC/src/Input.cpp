@@ -180,9 +180,3 @@ Input::~Input()
 {
 	delete msg2;
 }
-
-void Input::KeyDown(char Key)
-{
-//	if(
-//	msg[length] 
-}

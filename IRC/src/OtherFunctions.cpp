@@ -3,7 +3,7 @@
 
 
 
-
+/*
 bool GetTimeAndDate()
 {
 
@@ -27,7 +27,7 @@ bool GetTimeAndDate()
 			return true;
 		}
 	return false;
-}
+}*/
 
 char *charAllocAndSectionCopy(char *msg, int length, int extralength)
 {

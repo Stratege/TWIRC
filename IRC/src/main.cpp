@@ -163,7 +163,9 @@ LRESULT CALLBACK WndProc(HWND pHWND,UINT iMessage,WPARAM wParam,LPARAM lParam)
 			*/
 	
 }else if(iMessage == WM_SIZE){
-//		MoveWindow(hwndEdit, 0, 0, LOWORD(lParam), HIWORD(lParam), TRUE);
+		MoveWindow(hwndEdit, 0, HIWORD(lParam)-20, LOWORD(lParam), 40, TRUE);
+		if(g_pMainWindow != NULL) g_pMainWindow->Resize(LOWORD(lParam),HIWORD(lParam));
+//		SetWindowPos(hwndEdit,HWND_TOPMOST,0,0, 0, 0,SWP_NOMOVE|SWP_NOSIZE);
 //		return 0;
 	}else if(iMessage == WM_KILLFOCUS){
 	}else if(iMessage == WM_SETFOCUS){

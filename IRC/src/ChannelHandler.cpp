@@ -4,8 +4,7 @@
 ChannelHandler::ChannelHandler(int height, int width,int leftbarsize)
 {
 	ChannelList = new std::list<MessageBoxCF *>;
-	this->height = height-20;
-	this->width = width;
+	Resize(height, width);
 	this->leftbarsize = leftbarsize;
 	this->SelectedChannel = NULL;
 	SelectChannel("unknownRecievedMsgs");
@@ -286,4 +285,14 @@ void ChannelHandler::RemoveNick(char *Nick, char *Channel)
 void ChannelHandler::ShowUserList()
 {
 	this->SelectedChannel->DisplayUserList();
+}
+
+void ChannelHandler::Resize(int newWidth, int newHeight)
+{
+	this->height = newHeight-20;
+	this->width = newWidth;
+	for (std::list<MessageBoxCF *>::iterator tempIter = ChannelList->begin(); tempIter != ChannelList->end(); tempIter++)
+	{
+		(*tempIter)->SetRect(0,this->leftbarsize,this->height,this->width);
+	}	
 }

@@ -47,6 +47,8 @@ public:
 	void AddNick(char *Nick, char *Channel);
 	void RemoveNick(char *Nick, char *Channel = NULL);
 	void ShowUserList();
+
+	void Resize(int newWidth, int newHeight);
 };
 
 #endif

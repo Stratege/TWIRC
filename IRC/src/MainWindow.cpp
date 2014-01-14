@@ -217,6 +217,7 @@ SOCKET MainWindow::GetSocket()
 	return pSocket->GetSocket();
 }
 
+
 char *MainWindow::GetSelectedChannelName()
 {
 	return this->pChannelHandler->GetSelectedChannelName();
@@ -303,4 +304,28 @@ void MainWindow::RemoveNick(char *Nick, char *Channel)
 void MainWindow::ShowUserList()
 {
 	this->pChannelHandler->ShowUserList();
+}
+
+void MainWindow::Resize(int newWidth, int newHeight)
+{
+	if(this->pChannelHandler != NULL)
+	{
+		this->pChannelHandler->Resize(newWidth,newHeight);
+
+		this->iWindowWidth = newWidth;
+		this->iWindowHeight = newHeight;
+		//recreate shit
+		ReleaseDC(g_pWindow,g_pFrontbufferDC);
+		g_pFrontbufferDC = GetDC(g_pWindow);
+		DeleteObject(g_pBackbufferBitmap);
+		DeleteDC(g_pBackbufferDC);
+		g_pBackbufferDC = CreateCompatibleDC(NULL);
+		g_pBackbufferBitmap = CreateCompatibleBitmap(g_pFrontbufferDC,newWidth,(newHeight-20));
+		SelectObject(g_pBackbufferDC,g_pBackbufferBitmap);
+		SetBkColor(g_pBackbufferDC,TRANSPARENT);
+
+		g_pDrawingHandler->Resize(newWidth,newHeight-20);
+
+		this->DrawAll();
+	}
 }

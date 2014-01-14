@@ -35,6 +35,9 @@ DrawingHandler::DrawingHandler(void)
 	ChannelListRect.top = 0;
 
 
+TextColor = RGB(255,255,255);
+BackgroundColor = RGB(0,0,0);
+
 	SetBkColor(ChannelHDC,RGB(0,0,0));
 	SetTextColor(ChannelHDC,RGB(255,255,255));
 	SelectObject(ChannelHDC,CreateSolidBrush(RGB(0,0,0)));
@@ -89,12 +92,14 @@ void DrawingHandler::SetChannelRect(RECT *channelRect)
 
 void DrawingHandler::SetNewTextColor(int Color)
 {
+	this->TextColor = Color;
 	SetTextColor(ChannelHDC,Color);
 	SetTextColor(ChannelListHDC,Color);
 }
 
 void DrawingHandler::SetNewBackgroundColor(int Color)
 {
+	this->BackgroundColor = Color;
 	SetBkColor(ChannelHDC,Color);
 	SelectObject(ChannelHDC,CreateSolidBrush(Color));
 
@@ -135,4 +140,28 @@ void DrawingHandler::AddMessage(char *Message, bool Channel)
 	temprect2.bottom = tempRect.bottom - tempRect.top;
 	DrawText(tempHDC,Message,-1,&temprect2,DT_WORDBREAK);
 	this->Draw();
+}
+
+void DrawingHandler::Resize(int newWidth, int newHeight)
+{
+	DeleteObject(ChannelBitmap);
+	DeleteObject(ChannelListBitmap);
+	DeleteObject(tempBufferBitmap);
+	DeleteDC(ChannelHDC);
+	DeleteDC(ChannelListHDC);
+	DeleteDC(tempBufferHDC);
+
+	this->ChannelHDC = CreateCompatibleDC(g_pBackbufferDC);
+	this->ChannelBitmap = CreateCompatibleBitmap(g_pBackbufferDC,newWidth,newHeight);
+	SelectObject(ChannelHDC,ChannelBitmap);
+	this->ChannelListHDC = CreateCompatibleDC(g_pBackbufferDC);
+	this->ChannelListBitmap = CreateCompatibleBitmap(g_pBackbufferDC,newWidth,newHeight);
+	SelectObject(ChannelListHDC,ChannelListBitmap);
+
+	this->tempBufferHDC = CreateCompatibleDC(g_pBackbufferDC);
+	this->tempBufferBitmap = CreateCompatibleBitmap(g_pBackbufferDC,newWidth,newHeight);
+	SelectObject(tempBufferHDC,tempBufferBitmap);
+
+	this->SetNewBackgroundColor(this->BackgroundColor);
+	this->SetNewTextColor(this->TextColor);
 }
