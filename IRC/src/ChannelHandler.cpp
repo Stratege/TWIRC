@@ -52,13 +52,13 @@ void ChannelHandler::DrawChannellist()
 		temprect->bottom = rect->top+TextSize;
 
 
-		char *tempChar = new char[200];
+		char tempChar[200];
 
 		if(this->ChannelList->begin() != this->ChannelList->end())
 		{
 			for (std::list<MessageBoxCF *>::iterator tempIter = ChannelList->begin(); tempIter != ChannelList->end(); tempIter++)
 			{
-				strncpy(tempChar,(*tempIter)->GetName(),200);
+				strncpy(tempChar,(*tempIter)->GetName().c_str(),200);
 				snprintf(tempChar,200,"%s %i",tempChar,(*tempIter)->GetUnread());
 			
 				// new draw
@@ -74,7 +74,6 @@ void ChannelHandler::DrawChannellist()
 	*/			
 			}
 		}
-		delete(tempChar);
 		delete(temprect);
 		delete(rect);
 	}
@@ -90,12 +89,12 @@ void ChannelHandler::SelectChannel(MessageBoxCF *NewChannel)
 	SendMessage(g_pWindow,WM_PAINT,0,0);
 }
 
-void ChannelHandler::SelectChannel(char *Name)
+void ChannelHandler::SelectChannel(string Name)
 {
 	this->SelectChannel(FindChannel(Name));
 }
 
-void ChannelHandler::WriteToChannel(char *Name, char *msg)
+void ChannelHandler::WriteToChannel(string Name, string msg)
 {
 	MessageBoxCF *tempChannel = FindChannel(Name);
 	tempChannel->AddMessage(msg);
@@ -104,7 +103,7 @@ void ChannelHandler::WriteToChannel(char *Name, char *msg)
 	ChannelList->erase(ChannelHandler::FindChannelIteratorByName(Name));
 	ChannelList->push_front(tempChannel);
 
-	if(!strcmp(SelectedChannel->GetName(),Name))
+	if(!SelectedChannel->GetName().compare(Name))
 	{
 		SelectedChannel->ClearUnread();
 //		SelectedChannel->DrawMessages();
@@ -133,14 +132,14 @@ void ChannelHandler::WriteToChannel(char *Name, char *msg)
 	SendMessage(g_pWindow,WM_PAINT,0,0);
 }
 
-std::list<MessageBoxCF *>::iterator ChannelHandler::FindChannelIteratorByName(char *Name)
+std::list<MessageBoxCF *>::iterator ChannelHandler::FindChannelIteratorByName(string Name)
 {
 	if(ChannelList->begin() != ChannelList->end())
 	{
 		for (std::list<MessageBoxCF *>::iterator tempIter = ChannelList->begin(); tempIter != ChannelList->end(); tempIter++)
 		{
 			//Name exactly the same?
-			if(!strcmp((*tempIter)->GetName(),Name))
+			if(!(*tempIter)->GetName().compare(Name))
 			{
 				//found it, exit the loop!
 				return tempIter;
@@ -152,28 +151,28 @@ std::list<MessageBoxCF *>::iterator ChannelHandler::FindChannelIteratorByName(ch
 	return ChannelList->begin();
 }
 
-MessageBoxCF *ChannelHandler::FindChannel(char *Name)
+MessageBoxCF *ChannelHandler::FindChannel(string Name)
 {
 	//the vast majority of uses will modify the currently selected Channel, so it makes sense in terms of performance to do this.
 	if((int)this->SelectedChannel != NULL) if (this->SelectedChannel->GetName() == Name) return this->SelectedChannel;
 	return *ChannelHandler::FindChannelIteratorByName(Name);
 }
 
-void ChannelHandler::OpenChannel(char *Name)
+void ChannelHandler::OpenChannel(string Name)
 {
 	MessageBoxCF *NewChannel = new MessageBoxCF(Name);
 	NewChannel->SetRect(0,this->leftbarsize,this->height,this->width);
 	ChannelList->insert(ChannelList->begin(),NewChannel);
 }
 
-void ChannelHandler::CloseChannel(char *Name)
+void ChannelHandler::CloseChannel(string Name)
 {
 
 	MessageBoxCF *temp = FindChannel(Name);
 	bool WasMainChannel = false;
-	if(!strcmp(SelectedChannel->GetName(), Name)){
+	if(!SelectedChannel->GetName().compare(Name)){
 		SelectChannel("unknownRecievedMsgs");
-		if(Name = "unknownRecievedMsgs") WasMainChannel = true;
+		if(!Name.compare( "unknownRecievedMsgs")) WasMainChannel = true;
 	}
 	ChannelList->remove(temp);
 	delete(temp);
@@ -195,7 +194,7 @@ void ChannelHandler::CloseAll()
 	SelectChannel("unknownRecievedMsgs");
 }
 
-char *ChannelHandler::GetSelectedChannelName()
+string ChannelHandler::GetSelectedChannelName()
 {
 	return SelectedChannel->GetName();
 }
@@ -226,33 +225,33 @@ void ChannelHandler::ScrollChannelDown(int Lines)
 	SelectChannel(*CurrentChannelIter);
 }
 
-void ChannelHandler::ScrollUp(char *ChannelName, int Lines)
+void ChannelHandler::ScrollUp(string ChannelName, int Lines)
 {
 	(this->FindChannel(ChannelName))->ScrollUp(Lines);
 	RedrawAllIfChannelSelected(ChannelName);
 }
-void ChannelHandler::ScrollDown(char *ChannelName, int Lines)
+void ChannelHandler::ScrollDown(string ChannelName, int Lines)
 {
 	(this->FindChannel(ChannelName))->ScrollDown(Lines);
 	RedrawAllIfChannelSelected(ChannelName);
 }
-void ChannelHandler::ScrollToStart(char *ChannelName)
+void ChannelHandler::ScrollToStart(string ChannelName)
 {
 	(this->FindChannel(ChannelName))->ScrollToStart();
 	RedrawAllIfChannelSelected(ChannelName);
 }
-void ChannelHandler::ScrollToEnd(char *ChannelName)
+void ChannelHandler::ScrollToEnd(string ChannelName)
 {
 	(this->FindChannel(ChannelName))->ScrollToEnd();
 	RedrawAllIfChannelSelected(ChannelName);
 }
-void ChannelHandler::ScrollOneWindow(char *ChannelName, bool Up)
+void ChannelHandler::ScrollOneWindow(string ChannelName, bool Up)
 {
 	(this->FindChannel(ChannelName))->ScrollOneWindow(Up);
 	RedrawAllIfChannelSelected(ChannelName);
 }
 
-void ChannelHandler::RedrawAllIfChannelSelected(char *ChannelName)
+void ChannelHandler::RedrawAllIfChannelSelected(string ChannelName)
 {
 	if(this->SelectedChannel->GetName() == ChannelName)
 	{
@@ -268,13 +267,13 @@ void ChannelHandler::CopyCurrentLine()
 }
 
 
-void ChannelHandler::AddNick(char *Nick, char *Channel)
+void ChannelHandler::AddNick(string Nick, string Channel)
 {
 	FindChannel(Channel)->AddName(Nick);
 }
-void ChannelHandler::RemoveNick(char *Nick, char *Channel)
+void ChannelHandler::RemoveNick(string Nick, string Channel)
 {
-	if(Channel != NULL)
+	if(Channel.length())
 	{
 		FindChannel(Channel)->RemoveNameIfExists(Nick);
 	}else{

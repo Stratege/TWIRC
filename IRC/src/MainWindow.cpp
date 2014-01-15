@@ -93,9 +93,9 @@ void MainWindow::SwapBuffers()
 	BitBlt(g_pBackbufferDC,0,0,this->iWindowWidth,this->iWindowHeight,NULL,0,0,BLACKNESS);
 }
 
-void MainWindow::OutputInternalMessage(char *msg)
+void MainWindow::OutputInternalMessage(string msg)
 {
-	char *channelname = "-!InternalMessage";
+	const string channelname = "-!InternalMessage";
 #ifndef DisableTextLogging
 	pFileWriting->PrintOutputToFile(channelname,msg);
 #endif
@@ -107,8 +107,8 @@ void MainWindow::OutputMessage(Message *msg)
 
 	//everything wants us to copy things into a new string
 	//and have the date at the beginning. So that can be done independently
-	char *newMsg = new char[800];
-	char *channelname = NULL;
+	string newMsg;
+	string channelname;
 	pFileWriting->WriteTimeAndDate(newMsg);
 
 	if(msg->Outgoing)
@@ -150,7 +150,7 @@ void MainWindow::OutputMessage(Message *msg)
 			//copy msg into new string - done
 			//write new string into unknownSentMessages.log - done
 			//write new string into Chanel with Name unknownSentMessages - done
-			snprintf(newMsg,800,"%s%s",newMsg,msg->formatedMessage);
+			newMsg += msg->formatedMessage;
 			channelname = "unknownSentMessages";
 		}
 	}else{
@@ -161,10 +161,10 @@ void MainWindow::OutputMessage(Message *msg)
 		if(msg->GetNUHStatus())
 		{
 			int type = 0;
-			if(!strcmp(msg->ParameterArray[1],CurrentNickname)) type = 1;
-			else if(!strncmp(msg->ParameterArray[1],"#",1)) type = 2;
+			if(!msg->ParameterArray[1].compare(CurrentNickname)) type = 1;
+			else if(!msg->ParameterArray[1].compare(0,1,"#")) type = 2;
 			//for now we declare "-!" to be a channel as well
-			else if(!strncmp(msg->ParameterArray[1],"-!",2)) type = 2;
+			else if(!msg->ParameterArray[1].compare(0,2,"-!")) type = 2;
 			else type = -1;
 
 			if(type == 1 || type == 2)
@@ -173,10 +173,8 @@ void MainWindow::OutputMessage(Message *msg)
 				//date - OtherNick: msg
 				//into OtherNick.log
 
-				strcat(newMsg,msg->Nick);
-				strcat(newMsg,": ");
 				msg->MergeParameterArray(2);
-				strcat(newMsg,msg->formatedMessage);
+				newMsg += msg->Nick+": "+msg->formatedMessage;
 
 				if(type == 1){
 					channelname = msg->Nick;
@@ -195,11 +193,12 @@ void MainWindow::OutputMessage(Message *msg)
 				//copy msg into new string
 				//write new string into unknownRecievedMsgs.log
 				//write new string into Chanel with Name unknownRecievedMsgs
-				snprintf(newMsg,800,"%s%s",newMsg,msg->formatedMessage);
+				newMsg += msg->formatedMessage;
 				channelname = "unknownRecievedMsgs";
 			}
 		}else{
-			snprintf(newMsg,800,"%s%s",newMsg,msg->formatedMessage);
+			msg->MergeParameterArray();
+			newMsg += msg->formatedMessage;
 			channelname = "unknownRecievedMsgs";
 		}
 	}
@@ -208,8 +207,6 @@ void MainWindow::OutputMessage(Message *msg)
 	pFileWriting->PrintOutputToFile(channelname,newMsg);
 #endif
 	pChannelHandler->WriteToChannel(channelname,newMsg);
-	delete newMsg;
-	//delete channelname;
 }
 
 SOCKET MainWindow::GetSocket()
@@ -218,7 +215,7 @@ SOCKET MainWindow::GetSocket()
 }
 
 
-char *MainWindow::GetSelectedChannelName()
+string MainWindow::GetSelectedChannelName()
 {
 	return this->pChannelHandler->GetSelectedChannelName();
 }
@@ -237,17 +234,17 @@ void MainWindow::SocketClosedMessage()
 	this->OpenConnection();
 }
 
-void MainWindow::SendMessage(char *msg)
+void MainWindow::SendMessage(string msg)
 {
 	this->pInput->SendMessage(msg);
 }
 
-void MainWindow::SelectChannel(char *Name)
+void MainWindow::SelectChannel(string Name)
 {
 	this->pChannelHandler->SelectChannel(Name);
 }
 
-void MainWindow::CloseChannel(char *Name)
+void MainWindow::CloseChannel(string Name)
 {
 	this->pChannelHandler->CloseChannel(Name);
 }
@@ -267,23 +264,23 @@ void MainWindow::ScrollChannelDown(int Lines)
 	this->pChannelHandler->ScrollChannelDown(Lines);	
 }
 
-void MainWindow::ScrollUp(char *ChannelName, int Lines)
+void MainWindow::ScrollUp(string ChannelName, int Lines)
 {
 	this->pChannelHandler->ScrollUp(ChannelName,Lines);
 }
-void MainWindow::ScrollDown(char *ChannelName, int Lines)
+void MainWindow::ScrollDown(string ChannelName, int Lines)
 {
 	this->pChannelHandler->ScrollDown(ChannelName,Lines);
 }
-void MainWindow::ScrollToStart(char *ChannelName)
+void MainWindow::ScrollToStart(string ChannelName)
 {
 	this->pChannelHandler->ScrollToStart(ChannelName);
 }
-void MainWindow::ScrollToEnd(char *ChannelName)
+void MainWindow::ScrollToEnd(string ChannelName)
 {
 	this->pChannelHandler->ScrollToEnd(ChannelName);
 }
-void MainWindow::ScrollOneWindow(char *ChannelName, bool Up)
+void MainWindow::ScrollOneWindow(string ChannelName, bool Up)
 {
 	this->pChannelHandler->ScrollOneWindow(ChannelName,Up);
 }
@@ -292,11 +289,11 @@ void MainWindow::CopyCurrentLine()
 	this->pChannelHandler->CopyCurrentLine();
 }
 
-void MainWindow::AddNick(char *Nick, char *Channel)
+void MainWindow::AddNick(string Nick, string Channel)
 {
 	this->pChannelHandler->AddNick(Nick,Channel);
 }
-void MainWindow::RemoveNick(char *Nick, char *Channel)
+void MainWindow::RemoveNick(string Nick, string Channel)
 {
 	this->pChannelHandler->RemoveNick(Nick,Channel);
 }

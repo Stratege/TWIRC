@@ -1,6 +1,9 @@
 #ifndef __GLOBALS_GUARD__
 #define __GLOBALS_GUARD__
 
+
+
+
 #define WM_SOCKET (WM_USER + 1)
 
 
@@ -13,7 +16,10 @@
 #include <windows.h>
 //#include <windowsx.h>
 
+#include <vector>
 #include <string>
+using std::string;
+
 #include <list>
 //#include <map>
 //#include <exception>
@@ -46,10 +52,10 @@ extern HDC g_pBackbufferDC;
 extern HDC g_pFrontbufferDC;
 extern HBITMAP g_pBackbufferBitmap;
 
-extern char *CurrentTime;
-extern char *CurrentDate;
+extern string CurrentTime;
+extern string CurrentDate;
 //extern char *SelectedChannel;
-extern char *CurrentNickname;
+extern string CurrentNickname;
 
 static char *g_pWindowName = "IRC";
 
@@ -70,6 +76,7 @@ struct MessageMetaInfo
 //defines given by the IRC Protocol:
 #define RPL_NAMREPLY "353"
 #define RÜL_ENDOFNAMES "366"
+
 
 
 

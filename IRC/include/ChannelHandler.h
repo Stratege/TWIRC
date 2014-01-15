@@ -16,8 +16,8 @@ class ChannelHandler
 private:
 	std::list<MessageBoxCF *> *ChannelList; /// \var Contains the Channels
 	MessageBoxCF *SelectedChannel; /// \var The currently selected Channel
-	void RedrawAllIfChannelSelected(char *ChannelName);
-	std::list<MessageBoxCF *>::iterator FindChannelIteratorByName(char *Name);
+	void RedrawAllIfChannelSelected(string ChannelName);
+	std::list<MessageBoxCF *>::iterator FindChannelIteratorByName(string Name);
 	void SelectChannel(MessageBoxCF *NewChannel);
 	int height;
 	int width;
@@ -26,26 +26,26 @@ private:
 public:
 	ChannelHandler(int height, int width,int leftbarsize); /// \fn creator
 	~ChannelHandler(); /// \fn destructor
-	void SelectChannel(char *Name); /// \fn Changes the current Channel to be the selected Channel, creates it if it doesn't exist yet.
-	void WriteToChannel(char *Name, char *msg); /// \fn Writes something to the Channel with the Name specified in Name, creates it if it doesn't exist.
-	MessageBoxCF *FindChannel(char *Name); /// \fn Finds an existing Channel with the Name specified in Name - or creates it if it does not exist yet.
-	void OpenChannel(char *Name); /// \fn Creates a new Channel
-	void CloseChannel(char *Name); /// \fn Closes a Channel
+	void SelectChannel(string Name); /// \fn Changes the current Channel to be the selected Channel, creates it if it doesn't exist yet.
+	void WriteToChannel(string Name, string msg); /// \fn Writes something to the Channel with the Name specified in Name, creates it if it doesn't exist.
+	MessageBoxCF *FindChannel(string Name); /// \fn Finds an existing Channel with the Name specified in Name - or creates it if it does not exist yet.
+	void OpenChannel(string Name); /// \fn Creates a new Channel
+	void CloseChannel(string Name); /// \fn Closes a Channel
 	void CloseAll();
-	char *GetSelectedChannelName();
+	string GetSelectedChannelName();
 	void DrawSelected();
 	void DrawChannellist();
 	void ScrollChannelUp(int Lines);
 	void ScrollChannelDown(int Lines);
-	void ScrollUp(char *ChannelName, int Lines);
-	void ScrollDown(char *ChannelName, int Lines);
-	void ScrollToStart(char *ChannelName);
-	void ScrollToEnd(char *ChannelName);
-	void ScrollOneWindow(char *ChannelName, bool Up);
+	void ScrollUp(string ChannelName, int Lines);
+	void ScrollDown(string ChannelName, int Lines);
+	void ScrollToStart(string ChannelName);
+	void ScrollToEnd(string ChannelName);
+	void ScrollOneWindow(string ChannelName, bool Up);
 	void CopyCurrentLine();
 
-	void AddNick(char *Nick, char *Channel);
-	void RemoveNick(char *Nick, char *Channel = NULL);
+	void AddNick(string Nick, string Channel);
+	void RemoveNick(string Nick, string Channel = NULL);
 	void ShowUserList();
 
 	void Resize(int newWidth, int newHeight);

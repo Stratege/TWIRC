@@ -6,15 +6,15 @@
 
 
 
-char *prepareMessage(char *Message)
+char *prepareMessage(string Message)
 {
 	stripNewLine(Message);
 	//We create a char that is as long as it needs to be and obtains the Messages
-	int Msglength = strlen(Message);
+	int Msglength = Message.length();
 	//so if I don't call the following in IncomingMessagesHandling.cpp:
 	//it works with Msglength+2 (even though deletion is called at times and neither of those functions should be modifying the msg
 	char *MessageInsert = new char[Msglength+1];
-	strncpy(MessageInsert,Message,Msglength+1);
+	strncpy(MessageInsert,Message.c_str(),Msglength+1);
 
 /*	//don't do the below, it's just in here for historic reasons. And because it's a fun reminder.
 	//here's a neat little way to trick the debug code:
@@ -57,7 +57,7 @@ void MessageBoxCF::DrawMessages()
 		temprect->bottom = rect->bottom - rect->top-10;
 		int bottomOfTemprect = 0;
 		//draw Channel Name
-		DrawText(channelDC,this->GetName(),-1,temprect,DT_SINGLELINE + DT_TOP + DT_CENTER);
+		DrawText(channelDC,this->GetName().c_str(),-1,temprect,DT_SINGLELINE + DT_TOP + DT_CENTER);
 
 		temprect->top = rect->bottom-TextSize - rect->top;
 		temprect->left = 5;
@@ -111,7 +111,7 @@ bool MessageBoxCF::SetTextSize(int Size)
 
 
 
-void MessageBoxCF::AddMessage(char *Message)
+void MessageBoxCF::AddMessage(string Message)
 {
 	char *MessageInsert = prepareMessage(Message);
 
@@ -265,7 +265,7 @@ void MessageBoxCF::ClearMessagebox()
 	*/
 }
 
-char *MessageBoxCF::GetName()
+string MessageBoxCF::GetName()
 {
 	return this->MessageBoxName;
 }
@@ -316,7 +316,7 @@ void MessageBoxCF::CopyCurrentLine()
 }
 
 //possibly relevant for a different bug (the reason why the workaround was required
-char *MessageBoxCF::GetCurrentLine()
+string MessageBoxCF::GetCurrentLine()
 {
 	if(MessageQueue->size() != 0)
 	{
@@ -327,7 +327,7 @@ char *MessageBoxCF::GetCurrentLine()
 }
 
 //possibly relevant for bug
-MessageBoxCF::MessageBoxCF(char *Name)
+MessageBoxCF::MessageBoxCF(string Name)
 {
 	rect = new RECT;
 	rect->top = 0;
@@ -343,8 +343,7 @@ MessageBoxCF::MessageBoxCF(char *Name)
 
 	this->AddMessage("Channel Opened");
 	BottomMostDisplayedMessage = MessageQueue->begin();
-	MessageBoxName = new char[strlen(Name)+1];
-	snprintf(MessageBoxName,strlen(Name)+1,Name);
+	MessageBoxName = Name;
 }
 
 MessageBoxCF::~MessageBoxCF()
@@ -353,21 +352,20 @@ MessageBoxCF::~MessageBoxCF()
 	ClearMessagebox();
 	delete MessageQueue;
 	delete UserList;
-	delete MessageBoxName;
 }
 
-void MessageBoxCF::AddName(char *name)
+void MessageBoxCF::AddName(string name)
 {
 	char *nameInsert = prepareMessage(name);
 	UserList->insert(UserList->begin(),nameInsert);
 }
 
-void MessageBoxCF::RemoveNameIfExists(char *name)
+void MessageBoxCF::RemoveNameIfExists(string name)
 {
 	std::list<char *>::iterator tempIter = UserList->begin();
 	while(tempIter != UserList->end())
 	{
-		if(!strcmp(name,*tempIter))
+		if(!name.compare(*tempIter))
 		{
 			delete(*tempIter);
 			UserList->erase(tempIter);

@@ -2,23 +2,23 @@
 
 
 
-Message::Message(char *msg, bool Outgoing)
+Message::Message(const string msg, bool Outgoing)
 {
 	this->isNormalMessage = false;
 	this->Outgoing = Outgoing;
 	this->HasNickUserHost = false;
-	this->Nick = NULL;
+/*	this->Nick = NULL;
 	this->User = NULL;
 	this->Host = NULL;
 //	this->Command = NULL;
-	this->formatedMessage = NULL;
+	this->formatedMessage = NULL;*/
 	if(this->Outgoing)
 	{
 		ParseOutgoingMessage(msg);
 	}else{
 		ParseIncomingMessage(msg);
 	}
-}
+	}
 
 Message::~Message()
 {
@@ -39,56 +39,58 @@ Message::~Message()
 	}
 }
 
-void Message::ParseParams(char *msg)
+void Message::ParseParams(const string msg)
 {
 	int Offset = 0;
 	int length = 0;
-	do
+	string tempmsg = msg;
+	while(Offset != string::npos && tempmsg.size() > 0)
 	{
-		char *newPara;
-		if(msg[Offset] == ':')
+		string newPara;
+		if(tempmsg[0] == ':')
 		{
 //			Offset++;
 		}
-			length = CopyTillSymbol(&newPara,&msg[Offset],' ');
-			if(length >= 0)
-			{
-				Offset += length + 1; //+1 because symbol
-			}else{
-				newPara = charAllocAndSectionCopy(&msg[Offset]);
-			}
-			this->ParameterArray.insert(this->ParameterArray.end(),newPara);
+		
+		Offset = tempmsg.find(' ');
+		newPara = tempmsg.substr(0,Offset);
+		if(Offset != string::npos)
+		{
+			tempmsg = tempmsg.substr(Offset+1);
+		}
+		this->ParameterArray.insert(this->ParameterArray.end(),newPara);
 /*		}else{
 			Offset++; //because we don't want the :
 			CopyTillSymbol(&newPara,&msg[Offset],'\0');
 			length = -1;
 			this->ParameterArray.insert(this->ParameterArray.end(),newPara);
 		}*/
-	}while(length >= 0);
+	}
 }
 
-void Message::ParseOutgoingMessage(char *msg)
+void Message::ParseOutgoingMessage(const string msg)
 {
 	//messages are either:
 	// /command stuff
 	//or:
 	// msg
 	//in the later case it's a privmsg, in the former it is not
-	if(!strcspn(msg,"/"))
+	if(msg.find("/") == 0)
 	{
 			this->isNormalMessage = false;
 			ParseParams(&msg[1]);
 //			this->Command = charAllocAndSectionCopy(this->ParameterArray[0]);
 	}else{
 			this->isNormalMessage = true;
-			CopyTillSymbol(&this->formatedMessage,msg,'\0');
+			this->formatedMessage = msg;
+			//CopyTillSymbol(&this->formatedMessage,msg,'\0');
 //			this->Command = charAllocAndSectionCopy("PRIVMSG");
 	}
 }
 
 
 
-void Message::ParseIncomingMessage(char *msg)
+void Message::ParseIncomingMessage(string msg)
 {
 	//messages go in as :NICK!USER@HOST TYPE PARAMETERS
 	//whereby PARAMETERS might be lead by a : to indicate that it's multiple words
@@ -98,25 +100,33 @@ void Message::ParseIncomingMessage(char *msg)
 	//whereby PARAMETER can be fully optional
 
 	int Offset = 0;
-	int length = 0;
 	//let's get rid of the stupid \r\n
 	stripNewLine(msg);
 
 	if(msg[0] == ':')
 	{
+		string tempmsg = msg;
 		Offset++;
 		this->HasNickUserHost = true;
-		length = CopyTillSymbolIfNotOtherSymbolFirst(&this->Nick,&msg[1],'!',' ');
-		if(length == -1) goto ThingsWentBad;
-		Offset += length + 1; //+1 because symbol
-		length = CopyTillSymbolIfNotOtherSymbolFirst(&this->User,&msg[Offset],'@',' ');
-		if(length == -1) goto ThingsWentBad;
-		Offset += length + 1; //+1 because symbol
-		length = CopyTillSymbol(&this->Host,&msg[Offset],' ');
-		if(length == -1) goto ThingsWentBad;
-		Offset += length + 1; //+1 because symbol
 
-		ParseParams(&msg[Offset]);
+		Offset = tempmsg.find('!');
+		if(Offset == string::npos) goto ThingsWentBad;
+		this->Nick = tempmsg.substr(0,Offset);
+		tempmsg = tempmsg.substr(Offset+1);
+
+		Offset = tempmsg.find('@');
+		if(Offset == string::npos) goto ThingsWentBad;
+		this->User = tempmsg.substr(Offset);
+		tempmsg = tempmsg.substr(Offset+1);
+
+
+		Offset = tempmsg.find(' ');
+		if(Offset == string::npos) goto ThingsWentBad;
+		this->Host = tempmsg.substr(Offset);
+		tempmsg = tempmsg.substr(Offset+1);
+
+
+		ParseParams(tempmsg);
 
 	}else{
 		//I know this isn't strictly correct, but it does the job
@@ -134,10 +144,9 @@ void Message::ParseIncomingMessage(char *msg)
 	//wtf?
 	this->HasNickUserHost = false;
 	//shit is weird so we just toss out unparsed
-	formatedMessage = new char[strlen(msg)+1];
-	memcpy(formatedMessage,msg,strlen(msg)+1);
-	Offset = strcspn(msg," ")+1;
-	ParseParams(&msg[Offset]);
+
+	Offset = msg.find(" ")+1;
+	ParseParams(msg.substr(Offset));
 	return;
 }
 
@@ -146,38 +155,30 @@ bool Message::GetNUHStatus()
 	return this->HasNickUserHost;
 }
 
-char *Message::GetFormatedMessage()
+string Message::GetFormatedMessage()
 {
 	return this->formatedMessage;
 }
 
 void Message::MergeParameterArray(int begin, int end)
 {
+	this->formatedMessage.clear();
+
 	if(end == 0) end = this->ParameterArray.size();
 	else
 	{
 		//throw or not throw?
 		if(end > this->ParameterArray.size()) end = this->ParameterArray.size();
 	}
-
-	SemiSmartDelete(&this->formatedMessage);
-	int length = 0;
-	for(int i = begin; i < end; i++)
-	{
-		length += strlen(this->ParameterArray[i])+1;
-	}
-
-	this->formatedMessage = new char[length+1];
-	this->formatedMessage[0] = '\0';
-
+	
 	if(end > begin)
 	{
-		strcpy(this->formatedMessage,this->ParameterArray[begin]);
+		this->formatedMessage += this->ParameterArray[begin];
 
 		for (int i = begin+1; i < end; i++)
 		{
-			strcat(this->formatedMessage," ");
-			strcat(this->formatedMessage,this->ParameterArray[i]);
+			this->formatedMessage += " ";
+			this->formatedMessage += this->ParameterArray[i];
 		}
 	}
 }

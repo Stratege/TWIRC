@@ -10,9 +10,8 @@ HBITMAP g_pBackbufferBitmap;
 
 MainWindow *g_pMainWindow;
 
-//those don't belong here
-char *CurrentTime = new char[10];
-char *CurrentDate = new char[10];
-char *SelectedChannel = new char[50];
-char *CurrentNickname = new char[30];
 
+
+string CurrentTime;
+string CurrentDate;
+string CurrentNickname;

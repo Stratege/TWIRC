@@ -1,78 +1,84 @@
 #include "FileWriting.h"
+#include <fstream>
 
 
-
-void FileWriting::WriteTimeAndDate(char *msgToWriteInto)
+void FileWriting::WriteTimeAndDate(string &msgToWriteInto)
 {
+	char timeMsg[650];
 	time_t rawtime;
 	struct tm * timeinfo;
 	time (&rawtime);
 	timeinfo = localtime(&rawtime);
 	//writes in the style of: "hh:mm:ss dd.mm.yy - "
-	strftime(msgToWriteInto,650,"%H:%M:%S %d.%m.%y - ",timeinfo);
+	strftime(timeMsg,650,"%H:%M:%S %d.%m.%y - ",timeinfo);
+
+	msgToWriteInto = timeMsg;
 }
 
-void FileWriting::WriteNickname(char *msgToWriteInto, char *Nickname)
+void FileWriting::WriteNickname(string &msgToWriteInto,const string Nickname)
 {
 	//write the nick
 	//append ": " so it looks neat
-	snprintf(msgToWriteInto,650,"%s%s: ",msgToWriteInto,Nickname);
+	msgToWriteInto += Nickname + ": ";
 }
 
 
-void FileWriting::WriteMessage(char *msgToWriteInto, char *originalMsgToFilter)
+void FileWriting::WriteMessage(string &msgToWriteInto,const string originalMsgToFilter)
 {
-	int Offset = strcspn(originalMsgToFilter," ");
+	// figure out why this does what it does
+	int Offset = originalMsgToFilter.find(" ");
+	Offset++;
+	Offset = originalMsgToFilter.find(" ",Offset) +2;
+	msgToWriteInto += originalMsgToFilter.substr(Offset);
+/*	int Offset = strcspn(originalMsgToFilter," ");
 	Offset++;
 	Offset += strcspn(&originalMsgToFilter[Offset]," ") +2;
 	snprintf(msgToWriteInto,650,"%s%s",msgToWriteInto,&originalMsgToFilter[Offset]);
+	*/
 }
 
-void FileWriting::PrintOutputToFile(char *PrintChannelName,char *msg)
+void FileWriting::PrintOutputToFile(const string PrintChannelName,const string msg)
 {
 	//strcmp returns 0 if strings are equal. != 0 means it isn't equal.
-	if(strcmp(this->saveDirectory,"VOID"))
+	if(this->saveDirectory.compare("VOID"))
 	{
-		snprintf(savePath,999,"%s%s/%s.log",saveDirectory,CurrentNickname,PrintChannelName);
-		FILE *logFile = NULL;
+		savePath = saveDirectory+CurrentNickname+"/"+PrintChannelName+".log";
+		std::ofstream logFile;
+	
+//		FILE *logFile = NULL;
 		try{
-			logFile = fopen(savePath,"ab");
+			logFile.open(savePath,std::ofstream::out | std::ofstream::app);
 		}
 		catch(int e){
-			CreateDirectory(saveDirectory,NULL);
-			snprintf(savePath,999,"%s%s",saveDirectory,CurrentNickname);
-			if(!CreateDirectory(savePath,NULL))
+			CreateDirectory(saveDirectory.c_str(),NULL);
+			string NickDirectory = saveDirectory+CurrentNickname;
+			if(!CreateDirectory(NickDirectory.c_str(),NULL))
 			{
-				snprintf(savePath,999,"%s%s/%s.log",saveDirectory,CurrentNickname,PrintChannelName);
-				logFile = fopen(savePath,"ab");
+				logFile.open(savePath,std::ofstream::out | std::ofstream::app);
 			}
 		}
-		if(logFile != NULL)
+		if(logFile.is_open())
 		{
-			fwrite(msg,strlen(msg),1,logFile);
-			fclose(logFile);
+			logFile.write(msg.c_str(),msg.size());
+			logFile.close();
 		}
 	}
 }
 
-FileWriting::FileWriting(char *givenDirectory)
+FileWriting::FileWriting(string givenDirectory)
 {
-	if(strcmp(givenDirectory,"VOID"))
+	//todo: rewrite this class to be more sensible.
+
+	if(givenDirectory.compare("VOID"))
 	{
 		//savepath hasn't been set, this means we'll disable saving, currently this is done via setting it to void
-		this->saveDirectory = new char[5];
-		strncpy(this->saveDirectory,"VOID\0",5);
+		this->saveDirectory = "VOID";
 		//todo: send msg informing the client that loading has been disabled
 	}else{
-		this->saveDirectory = new char[500];
-		strncpy(this->saveDirectory,givenDirectory,499);
-		this->saveDirectory[strlen(givenDirectory)] = '\0';
+		this->saveDirectory = givenDirectory;
 	}
-	this->savePath = new char[1000];
 }
 
 FileWriting::~FileWriting()
 {
-	delete(saveDirectory);
-	delete(savePath);
 }

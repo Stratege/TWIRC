@@ -1,17 +1,18 @@
 #include "FindFunctions.h"
 
-bool StringFromStringListEqual(char *str1, char *strlist2[])
+bool StringFromStringListEqual(string str1,std::vector<string> strlist2)
 {
-	for(int i = 0; strlist2[i] != 0; i++)
+	for(int i = 0; i < strlist2.size(); i++)
 	{
-		if(!strcmp(str1,strlist2[i])) return true;
+		if(!str1.compare(strlist2[i])) return true;
 	}
 	return false;
 }
 
-bool StringBeginEqual(char *str1, char *str2)
+bool StringBeginEqual(const string str1, const char *str2)
 {
-	return (str1 == strstr(str1,str2));
+	int length = strlen(str2);
+	return !str1.compare(0,length,str2);
 }
 
 

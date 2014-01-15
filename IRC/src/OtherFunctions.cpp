@@ -71,35 +71,36 @@ void SemiSmartDelete(void *ThatThatIsToDelete)
 	}
 }
 
-bool stripNewLine(char *msg)
+bool stripNewLine(string &msg)
 {
-	int length = strlen(msg);
-	if(msg[length-2] == '\r' && msg[length-1] == '\n')
+	int length = msg.length();
+	if(length >= 2)
 	{
-		msg[length-2] = '\0';
-		return true;
+		if(msg[length-2] == '\r' && msg[length-1] == '\n')
+		{
+			msg.erase(msg.end()-2,msg.end());
+			return true;
+		}
 	}
 	return false;
 }
-
+/*
 char *stripNewLineAndAlloc(char *msg)
 {
 	stripNewLine(msg);
 	return charAllocAndSectionCopy(msg);
-}
+}*/
 
-bool appendNewLine(char **msg)
+bool appendNewLine(string &msg)
 {
-	int length = strlen(*msg);
-	if((*msg)[length-2] == '\r' && (*msg)[length-1] == '\n') return false;
-	else
+	int length = msg.length();
+	if(length >= 2)
 	{
-		char *newMsg = charAllocAndSectionCopy(*msg,length,2);
-		newMsg[length] = '\r';
-		newMsg[length+1] = '\n';
-		newMsg[length+2] = '\0';
-		delete *msg;
-		*msg = newMsg;
+		if(msg[length-2] == '\r' && msg[length-1] == '\n')
+		{
+			return false;
+		}
+		msg.append("\r\n");
 		return true;
 	}
 }

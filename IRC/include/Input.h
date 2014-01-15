@@ -20,7 +20,7 @@ private:
 public:
 	Input();
 	~Input();
-	void SendMessage(char *msg);
+	void SendMessage(std::string msg);
 };
 
 #endif

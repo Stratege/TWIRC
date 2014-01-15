@@ -19,16 +19,16 @@ private:
 	int DisplayCount; ///
 	std::list<char *>::iterator BottomMostDisplayedMessage;
 	int TextSize;
-	char *MessageBoxName;
+	string MessageBoxName;
 	int UnreadMessages;
 
 public:
-	MessageBoxCF(char *Name); /// \fn creator
+	MessageBoxCF(string Name); /// \fn creator
 	~MessageBoxCF(); /// \fn destructor
 	void DrawMessages(); /// \fn Draws the current message, swaps messages if NewTime > turnNumber
 	void SetRect(int top, int left, int bottom, int right); /// \fn Sets the position of the Message Box
 	bool SetTextSize(int Size); /// \fn Sets the Size of the to be displayed Text. Returns true if successful.
-	void AddMessage(char *Message); /// \fn Adds a message to the Queue
+	void AddMessage(string Message); /// \fn Adds a message to the Queue
 	bool IsQueueEmpty(); /// \fn Checks if the Queue is empty
 	void ClearMessagebox(); /// \fn Clears the Queue
 	void RemoveOldestMessage(); /// \fn Removes the oldest message from the Queue
@@ -37,15 +37,15 @@ public:
 	void ScrollToStart(); /// \fn Scrolls to newest message
 	void ScrollToEnd(); /// \fn Scrolls to oldest message - DisplayCount
 	void ScrollOneWindow(bool Up); /// \fn Scrolls by the amount specified in DisplayCount. Either up or down depending on direction
-	char *GetName(); /// \fn Returns the name of the Messagebox
+	string GetName(); /// \fn Returns the name of the Messagebox
 	void ClearUnread();
 	int GetUnread();
 	void CopyCurrentLine();
-	char *GetCurrentLine();
+	string GetCurrentLine();
 	bool IsQueueEmptyOrAlmostEmpty();
 	bool DisplayingNewestMessage();
-	void AddName(char *name);
-	void RemoveNameIfExists(char *name);
+	void AddName(string name);
+	void RemoveNameIfExists(string name);
 	void DisplayUserList();
 };
 

@@ -10,8 +10,8 @@ bool IncomingMessagesHandling::PingStuff(Message *msg)
 		//Ping works, no need to confirm it anymore. Also fairly sure that can only be send by the server
 		//OutputMessage(msg,0);
 		msg->formatedMessage[1] = 'O';
-		appendNewLine(&msg->formatedMessage);
-		send(pMainWindow->GetSocket(),msg->formatedMessage,strlen(msg->formatedMessage),0);
+		appendNewLine(msg->formatedMessage);
+		send(pMainWindow->GetSocket(),msg->formatedMessage.c_str(),msg->formatedMessage.length(),0);
 		return true;
 	}else return false;
 }
@@ -22,10 +22,10 @@ void IncomingMessagesHandling::decodeServerMessages(Message *msg)
 		{
 			//it's not a ping
 			//currently that means, just print it
-			if(!strcmp(msg->ParameterArray[0],RPL_NAMREPLY))
+			if(!msg->ParameterArray[0].compare(RPL_NAMREPLY))
 			{
-				char *Channel = msg->ParameterArray[3];
-				for(int i = 4; i < msg->ParameterArray.size(); i++)
+				string Channel = msg->ParameterArray[3];
+				for(unsigned int i = 4; i < msg->ParameterArray.size(); i++)
 				{
 					pMainWindow->AddNick(msg->ParameterArray[i],Channel);
 				}
@@ -40,52 +40,51 @@ void IncomingMessagesHandling::decodeNonServerNonPrivmsg(Message *msg)
 {
 	msg->MergeParameterArray();
 	pMainWindow->OutputInternalMessage(msg->formatedMessage);
-	if(!strcmp(msg->Nick,CurrentNickname))
+	if(!msg->Nick.compare(CurrentNickname))
 	{
-		if(!strcmp(msg->ParameterArray[0],"NICK"))
+		if(!msg->ParameterArray[0].compare("NICK"))
 		{
-			CurrentNickname = charAllocAndSectionCopy(msg->ParameterArray[1]);
+			CurrentNickname = msg->ParameterArray[1];
 			SemiSmartDelete(&msg->ParameterArray[0]);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy("Nickname has been changed to: "),2);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->ParameterArray[1]),3);
+			VectorInsertStuff<string>(msg->ParameterArray,"Nickname has been changed to: ",2);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->ParameterArray[1],3);
 			msg->MergeParameterArray();
 			pMainWindow->OutputMessage(msg);
-		}else if(!strcmp(msg->ParameterArray[0],"JOIN"))
+		}else if(!msg->ParameterArray[0].compare("JOIN"))
 		{
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy("You have joined the Channel: "),2);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->ParameterArray[1]),3);
+			VectorInsertStuff<string>(msg->ParameterArray,"You have joined the Channel: ",2);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->ParameterArray[1],3);
 //			msg->ParameterArray[3] = charAllocAndSectionCopy(msg->ParameterArray[1]);
 			pMainWindow->OutputMessage(msg);
 		}
 	}else{
-		if(!strcmp(msg->ParameterArray[0],"NICK"))
+		if(!msg->ParameterArray[0].compare("NICK"))
 		{
 			//snprintf(msg,499,"-!Nickchanges * :%s has changed his Nickname to: %s\r\n",oldNick, newNick);
 
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->Nick),2);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy("has changed their Nickname to:"),3);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->ParameterArray[1]),4);
+			VectorInsertStuff<string>(msg->ParameterArray,"has changed their Nickname to:",3);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->ParameterArray[1],4);
 			pMainWindow->OutputMessage(msg);
-		}else if(!strcmp(msg->ParameterArray[0],"JOIN")){
+		}else if(!msg->ParameterArray[0].compare("JOIN")){
 			//snprintf(msg,499,"%s * :%s has joined the Channel\r\n",channelName,Nick);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->Nick),2);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy("has joined the Channel."),3);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->Nick,2);
+			VectorInsertStuff<string>(msg->ParameterArray,"has joined the Channel.",3);
 			pMainWindow->OutputMessage(msg);
 			pMainWindow->AddNick(msg->Nick,msg->ParameterArray[1]);
-		}else if(!strcmp(msg->ParameterArray[0],"QUIT")){
+		}else if(!msg->ParameterArray[0].compare("QUIT")){
 			//snprintf(msg,499,"-!Quitmessages * :%s has terminated his connection, reason: %s\r\n",Nick, Quitreason);	
 			msg->MergeParameterArray(2);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->Nick),2);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy("has terminated their connection, reason:"),3);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->formatedMessage),4);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->Nick,2);
+			VectorInsertStuff<string>(msg->ParameterArray,"has terminated their connection, reason:",3);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->formatedMessage,4);
 			pMainWindow->OutputMessage(msg);
 			pMainWindow->RemoveNick(msg->Nick);
-		}else if(!strcmp(msg->ParameterArray[0],"PART")){
+		}else if(!msg->ParameterArray[0].compare("PART")){
 			msg->MergeParameterArray(2);
 			//snprintf(msg,499,"%s * :%s has left the Channel %s \r\n",channelName,Nick, reason);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->Nick),2);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy("has left the Channel, reason:"),3);
-			VectorInsertStuff<char>(msg->ParameterArray,charAllocAndSectionCopy(msg->formatedMessage),4);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->Nick,2);
+			VectorInsertStuff<string>(msg->ParameterArray,"has left the Channel, reason:",3);
+			VectorInsertStuff<string>(msg->ParameterArray,msg->formatedMessage,4);
 			pMainWindow->OutputMessage(msg);
 			pMainWindow->RemoveNick(msg->Nick,msg->ParameterArray[1]);
 		}
@@ -126,71 +125,6 @@ void IncomingMessagesHandling::DecodeOutput(char *msg)
 	delete newMsg;
 }
 
-
-/*	//TODO: rewrite*
-	//holy shit this code is in dire need of rewriting
-	int nameLength = FindSign(msg,'!');
-	nameLength--;
-	if(nameLength <= 0)
-	{
-		//server message
-		decodeServerMessages(msg);
-	}else
-	{
-		//what we recieve:
-		//:NAME!...stuff...PRIVMSG CHANNELNAME :MESSAGE
-		//what we want to display:
-		//CHANNELNAME NAME :MESSAGE
-		
-		//set the name
-//		char *Name = new char[NameLength+1];
-//		memcpy(Name,&msg[1],NameLength);
-//		Name[NameLength+1] = '\0';
-
-		int ChannelOffset = FindSign(msg,' ');
-		ChannelOffset++;
-		if(!StringCompare(&msg[ChannelOffset],"PRIVMSG")){
-			//not a PRIVMSG? hand it over to the next function
-			decodeNonServerNonPrivmsg(msg,ChannelOffset);
-		}else{
-			ChannelOffset += FindSign(&msg[ChannelOffset],' ');
-			ChannelOffset++;
-
-			int ChannelNameLength = FindSign(&msg[ChannelOffset],' ');
-	//		char *ChannelName = new char[ChannelNameLength+1];
-	//		memcpy(ChannelName,&msg[ChannelOffset],ChannelNameLength);
-	//		ChannelName[ChannelNameLength+1] = '\0';
-
-			int MessageOffset = ChannelOffset + FindSign(&msg[ChannelOffset],':') + 1;
-			int MessageLength = strlen(msg)-MessageOffset;
-
-			if((ChannelOffset <= -1 ) || (MessageOffset <= -1) || (MessageLength <= -1) || (ChannelNameLength <= -1) || (nameLength <= -1))
-			{
-				//something went wrong, just print the message
-				pMainWindow->OutputMessage(msg,0);
-			}else{
-				char *msg2 = new char[ChannelNameLength+MessageLength+nameLength+10];
-
-				//CHANNELNAME NAME MESSAGE
-				memcpy(msg2,&msg[ChannelOffset],ChannelNameLength);
-				msg2[ChannelNameLength] = ' ';
-				memcpy(&msg2[ChannelNameLength+1],&msg[1],nameLength);
-				msg2[ChannelNameLength+nameLength+1] = ':';
-				msg2[ChannelNameLength+nameLength+2] = ' ';
-				msg2[ChannelNameLength+nameLength+3] = ':';
-				memcpy(&msg2[ChannelNameLength+nameLength+4],&msg[MessageOffset],MessageLength);
-				msg2[ChannelNameLength+nameLength+MessageLength+4] = '\0';
-
-				pMainWindow->OutputMessage(msg2,0);
-//				std::cout << " - " << SelectedChannel;
-				
-				delete msg2;
-		//		delete ChannelName;
-		//		delete Name;
-			}
-		}
-	}
-}*/
 
 void IncomingMessagesHandling::OutputHandling()
 {
@@ -253,15 +187,14 @@ void IncomingMessagesHandling::ResetCount()
 	count = 0;
 }
 
-IncomingMessagesHandling::IncomingMessagesHandling(MainWindow *Parent, char *sNick, char *sUser, char *sRealname)
+IncomingMessagesHandling::IncomingMessagesHandling(MainWindow *Parent, string sNick, string sUser, string sRealname)
 {
 	pMainWindow = Parent;
 	this->nick = sNick;
 	this->user = sUser;
 	this->realname = sRealname;
-	msg = new char[500];
 	count = 0;
-	strncpy(CurrentNickname,nick,30);
+	CurrentNickname = nick;
 }
 
 IncomingMessagesHandling::~IncomingMessagesHandling()

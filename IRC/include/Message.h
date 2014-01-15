@@ -6,28 +6,30 @@
 #include "OtherFunctions.h"
 #include <vector>
 
+using std::vector;
+
 class Message
 {
 private:
 
-	void ParseParams(char *msg);
-	void ParseOutgoingMessage(char *msg);
-	void ParseIncomingMessage(char *msg);
+	void ParseParams(const string msg);
+	void ParseOutgoingMessage(const string msg);
+	void ParseIncomingMessage(string msg);
 public:
-	Message(char *msg, bool Outgoing);
+	Message(std::string msg, bool Outgoing);
 	~Message();
 	bool GetNUHStatus();
-	char *GetFormatedMessage();
+	string GetFormatedMessage();
 	void MergeParameterArray(int begin = 0, int end = 0);
 
 	//fuck it
 	bool HasNickUserHost;
-	char *Nick;
-	char *User;
-	char *Host;
+	string Nick;
+	string User;
+	string Host;
 //	char *Command;
-	std::vector<char *> ParameterArray;
-	char *formatedMessage;	
+	vector<string> ParameterArray;
+	string formatedMessage;	
 	bool Outgoing;
 	bool isNormalMessage;
 };

@@ -11,21 +11,20 @@ int CopyTillSymbol(char **target, char *source, char symbol);
 int CopyTillSymbolIfNotOtherSymbolFirst(char **target, char *source, char symbol, char othersymbol);
 void SemiSmartDelete(void *ThatThatIsToDelete);
 
-bool appendNewLine(char **msg);
+bool appendNewLine(string &msg);
 
-bool stripNewLine(char *msg);
-char *stripNewLineAndAlloc(char *msg);
+bool stripNewLine(string &msg);
+//char *stripNewLineAndAlloc(char *msg);
 
 
 //only declaring the name here lead to linker error. So it's fully here.
 template <typename type>
-void VectorInsertStuff(std::vector<type*> &list, type* Value, int Position)
+void VectorInsertStuff(std::vector<type> list, type Value, int Position)
 {
 	while(Position >= list.size())
 	{
-		list.insert(list.end(),new type);
+		list.insert(list.end(), type());
 	}
-	SemiSmartDelete(&list[Position]);
 	list[Position] = Value;
 }
 

@@ -7,9 +7,9 @@
 #include <string.h>
 
 
-bool StringFromStringListEqual(char *str1, char *strlist2[]);
+bool StringFromStringListEqual(string str1,std::vector<string> strlist2);
 
-bool StringBeginEqual(char *str1, char *str2);
+bool StringBeginEqual(const string msg, const char *str2);
 
 
 /*

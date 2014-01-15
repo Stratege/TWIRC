@@ -10,11 +10,11 @@ class MainWindow;
 class IncomingMessagesHandling
 {
 private:
-	char *msg;
+	char msg[600];
 	int count;
-	char *nick;
-	char *user;
-	char *realname;
+	string nick;
+	string user;
+	string realname;
 	bool PingStuff(Message *msg);
 	void decodeServerMessages(Message *msg);
 	void decodeNonServerNonPrivmsg(Message *msg);
@@ -23,7 +23,7 @@ private:
 
 public:
 	void OutputHandling();
-	IncomingMessagesHandling(MainWindow *Parent, char *sNick, char *sUser, char *sRealname = "Ask if you want to know");
+	IncomingMessagesHandling(MainWindow *Parent, string sNick, string sUser, string sRealname = "Ask if you want to know");
 	~IncomingMessagesHandling();
 	void ResetCount();
 };

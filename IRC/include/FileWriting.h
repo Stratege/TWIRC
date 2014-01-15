@@ -9,16 +9,16 @@ class FileWriting
 {
 private: 
 
-	char *saveDirectory;
-	char* savePath;
+	string saveDirectory;
+	string savePath;
 
 public: 
-	void WriteTimeAndDate(char *msgToWriteInto);
-	void WriteNickname(char *msgToWriteInto, char *Nickname);
-	void WriteMessage(char *msgToWriteInto, char *originalMsgToFilter);
-
-	void PrintOutputToFile(char *PrintChannelName,char *msg); /// \fn Prints msg into File specified by PrintName.
-	FileWriting(char *givenDirectory);
+	void WriteTimeAndDate(string &msgToWriteInto);
+	void WriteNickname(string &msgToWriteInto, const string Nickname);
+	void WriteMessage(string &msgToWriteInto, const string originalMsgToFilter);
+	
+	void PrintOutputToFile(const string PrintChannelName,const string msg); /// \fn Prints msg into File specified by PrintName.
+	FileWriting(string givenDirectory);
 	~FileWriting();
 };
 

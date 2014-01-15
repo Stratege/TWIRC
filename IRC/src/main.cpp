@@ -27,7 +27,7 @@ LRESULT APIENTRY EditSubclassProc(HWND hWnd, WORD wMessage,WORD wParam,LONG lPar
 		case WM_KEYDOWN:
 			if (wParam == VK_RETURN) 
 			{
-				char *temp = new char[500];
+				char temp[500];
 				*((WORD*)&temp[0]) = 499; //set the first word of the buffer to the size of the buffer
 	int i = SendMessage(hwndEdit, EM_GETLINE, 0, (LPARAM)temp); //get line 0 from ec and put it in buffer retbuf
 //				int i = SendMessage(hwndEdit,EM_GETLINE,0,(LPARAM)temp);
@@ -38,7 +38,6 @@ LRESULT APIENTRY EditSubclassProc(HWND hWnd, WORD wMessage,WORD wParam,LONG lPar
 				{
 					g_pMainWindow->SendMessage(temp);
 				}
-				delete temp;
 				return FALSE;
 			}else if(wParam == VK_UP){
 				//check if ctrl is down
