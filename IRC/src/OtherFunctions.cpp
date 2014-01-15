@@ -91,7 +91,7 @@ char *stripNewLineAndAlloc(char *msg)
 bool appendNewLine(char **msg)
 {
 	int length = strlen(*msg);
-	if((*msg)[length-2] == '\n' && (*msg)[length-1] == '\r') return false;
+	if((*msg)[length-2] == '\r' && (*msg)[length-1] == '\n') return false;
 	else
 	{
 		char *newMsg = charAllocAndSectionCopy(*msg,length,2);

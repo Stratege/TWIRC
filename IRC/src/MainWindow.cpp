@@ -57,7 +57,7 @@ bool MainWindow::OpenConnection()
 	if(pSocket->OpenConnection("IRC",this->pReadInit->GetServeraddress(),this->pReadInit->GetPort()))
 	{
 		char startingMessage[600];
-		snprintf(startingMessage,600,"/USER %s 0 *: %s\r\n",this->pReadInit->GetUser(),this->pReadInit->GetRealname());
+		snprintf(startingMessage,600,"/USER %s 0 * :%s\r\n",this->pReadInit->GetUser(),this->pReadInit->GetRealname());
 		this->SendMessage(startingMessage);
 		snprintf(startingMessage,600,"/NICK %s\r\n",this->pReadInit->GetNick());
 		this->SendMessage(startingMessage);

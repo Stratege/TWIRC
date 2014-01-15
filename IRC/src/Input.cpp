@@ -20,7 +20,7 @@ int SendAMsg(SOCKET s, const char *buf, int len, int flags)
 		//just toss out a "timer couldn't be set msg"
 		g_pMainWindow->OutputInternalMessage("INTERNAL_MESSAGE Timer could not be set");
 	}
-	return send(s,buf,len,flags);
+	return send(s,buf,len+1,flags);
 }
 
 void SendTheMessage(Message *msg)

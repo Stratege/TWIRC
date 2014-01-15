@@ -48,7 +48,7 @@ void Message::ParseParams(char *msg)
 		char *newPara;
 		if(msg[Offset] == ':')
 		{
-			Offset++;
+//			Offset++;
 		}
 			length = CopyTillSymbol(&newPara,&msg[Offset],' ');
 			if(length >= 0)
