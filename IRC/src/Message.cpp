@@ -123,7 +123,7 @@ void Message::ParseIncomingMessage(char *msg)
 		goto ThingsWentBad;
 	}
 
-	if(StringBeginEqual(this->ParameterArray[0],"PRIVMSG"))	this->isNormalMessage = true;
+	if(StringBeginEqual(this->ParameterArray[0],"PRIVMSG") || StringBeginEqual(this->ParameterArray[0],"NOTICE"))	this->isNormalMessage = true;
 	else this->isNormalMessage = false;
 
 	return;

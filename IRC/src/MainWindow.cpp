@@ -39,7 +39,7 @@ MainWindow::MainWindow(HINSTANCE g_pInstance, HWND g_pWindow)
 
 	SetWindowPos(this->pWindow, 0, 0, 0, this->iWindowWidth, this->iWindowHeight+25, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 	this->pReadInit->MessagesToExecute->ClearMessagebox();
-
+	Resize(this->iWindowWidth,this->iWindowHeight);
 }
 
 MainWindow::~MainWindow()

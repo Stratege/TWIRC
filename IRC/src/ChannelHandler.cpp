@@ -110,13 +110,16 @@ void ChannelHandler::WriteToChannel(char *Name, char *msg)
 //		SelectedChannel->DrawMessages();
 		if(SelectedChannel->DisplayingNewestMessage())
 		{
+			this->DrawSelected();
 			if(g_pDrawingHandler == 0)
 			{
 				new DrawingHandler();
 			}
 			if(g_pDrawingHandler != 0)
 			{
-				g_pDrawingHandler->AddMessage(SelectedChannel->GetCurrentLine(),true);
+				//temporarily disabled. Needs to be reenabled
+				//g_pDrawingHandler->AddMessage(SelectedChannel->GetCurrentLine(),true);
+
 			}
 		}
 		//invokes redrawing the window
@@ -125,7 +128,7 @@ void ChannelHandler::WriteToChannel(char *Name, char *msg)
 //		RedrawWindow(g_pWindow,0,0,RDW_INTERNALPAINT);
 	}
 
-//	this->DrawChannellist();
+	this->DrawChannellist();
 
 	SendMessage(g_pWindow,WM_PAINT,0,0);
 }
