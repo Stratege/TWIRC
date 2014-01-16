@@ -167,7 +167,7 @@ void MessageBoxCF::RemoveOldestMessage()
 		{
 			BottomMostDisplayedMessage--;
 		}
-		delete(*tempIter);
+		delete[](*tempIter);
 		MessageQueue->erase(tempIter);
 //		MessageQueue->pop_back();
 		if(IsQueueEmpty())
@@ -175,29 +175,6 @@ void MessageBoxCF::RemoveOldestMessage()
 			BottomMostDisplayedMessage = MessageQueue->begin();
 		}
 	}
-	/*
-	if(!IsQueueEmptyOrAlmostEmpty())
-	{
-		std::list<char *>::iterator tempIter = MessageQueue->end();
-		if(MessageQueue->_Mysize != 0)
-		{
-			tempIter--;
-			if(BottomMostDisplayedMessage == tempIter)
-			{
-				BottomMostDisplayedMessage--;
-			}
-//			MessageQueue->erase(tempIter);
-			char *tempCharForDeletion = *tempIter;
-			delete(tempCharForDeletion);
-			MessageQueue->pop_back();
-		}
-		if(IsQueueEmpty())
-		{
-			BottomMostDisplayedMessage = MessageQueue->begin();
-		}
-	}
-	//todo: update iterator
-	*/
 }
 
 void MessageBoxCF::ScrollUp(int lines)
@@ -239,30 +216,12 @@ void MessageBoxCF::ScrollOneWindow(bool Up)
 	}
 }
 
-
-//possibly relevant to the bug
 void MessageBoxCF::ClearMessagebox()
 {
 	while(!IsQueueEmpty())
 	{
 		RemoveOldestMessage();
 	}
-/*	while(!IsQueueEmptyOrAlmostEmpty())
-		RemoveOldestMessage();
-	std::list<char *>::iterator tempIter = MessageQueue->end();
-	if(MessageQueue->_Mysize != 0)
-	{
-		tempIter--;
-	// it'd be nice to be able to fix this.
-//		MessageQueue->erase(tempIter);
-		delete(*tempIter);
-		MessageQueue->pop_back();
-	}
-	if(IsQueueEmpty())
-	{
-		BottomMostDisplayedMessage = MessageQueue->begin();
-	}
-	*/
 }
 
 string MessageBoxCF::GetName()
@@ -315,7 +274,6 @@ void MessageBoxCF::CopyCurrentLine()
 		}	
 }
 
-//possibly relevant for a different bug (the reason why the workaround was required
 string MessageBoxCF::GetCurrentLine()
 {
 	if(MessageQueue->size() != 0)
@@ -326,7 +284,6 @@ string MessageBoxCF::GetCurrentLine()
 	}
 }
 
-//possibly relevant for bug
 MessageBoxCF::MessageBoxCF(string Name)
 {
 	rect = new RECT;
@@ -351,6 +308,10 @@ MessageBoxCF::~MessageBoxCF()
 	delete rect;
 	ClearMessagebox();
 	delete MessageQueue;
+	while(UserList->begin() != UserList->end())
+	{
+		delete[] *(UserList->begin());
+	}
 	delete UserList;
 }
 
@@ -378,22 +339,13 @@ void MessageBoxCF::RemoveNameIfExists(string name)
 
 void MessageBoxCF::DisplayUserList()
 {
-	const char *startingmsgthing = "Following users in Channel: ";
-	char *displayMsg;
-	int length = strlen(startingmsgthing)+1;
-	for(std::list<char *>::iterator tempIter = UserList->begin(); tempIter != UserList->end(); tempIter++)
-	{
-		length += strlen(*tempIter)+1;
-	}
-	char *userListMsg = new char[length];
-	strncpy(userListMsg,startingmsgthing,length);
+	string userListMsg = "Following users in Channel: ";
 
+	
 	for(std::list<char *>::iterator tempIter = UserList->begin(); tempIter != UserList->end(); tempIter++)
 	{
-		strcat(userListMsg," ");
-		strcat(userListMsg,*tempIter);
+		userListMsg += (string)" " + *tempIter;
 	}
 
 	this->AddMessage(userListMsg);
-	delete userListMsg;
 }

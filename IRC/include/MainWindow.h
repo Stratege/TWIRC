@@ -57,7 +57,7 @@ public:
 	void CopyCurrentLine();
 
 	void AddNick(string Nick, string Channel);
-	void RemoveNick(string Nick, string Channel = NULL);
+	void RemoveNick(string Nick, string Channel = "");
 	void ShowUserList();
 
 	void Resize(int newWidth, int newHeight);

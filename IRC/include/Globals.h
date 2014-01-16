@@ -75,7 +75,7 @@ struct MessageMetaInfo
 
 //defines given by the IRC Protocol:
 #define RPL_NAMREPLY "353"
-#define RÜL_ENDOFNAMES "366"
+#define RPL_ENDOFNAMES "366"
 
 
 

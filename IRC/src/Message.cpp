@@ -108,21 +108,22 @@ void Message::ParseIncomingMessage(string msg)
 		string tempmsg = msg;
 		Offset++;
 		this->HasNickUserHost = true;
+		int MaxOffset = tempmsg.find(' ');
 
 		Offset = tempmsg.find('!');
-		if(Offset == string::npos) goto ThingsWentBad;
-		this->Nick = tempmsg.substr(0,Offset);
+		if(Offset == string::npos || Offset >= MaxOffset) goto ThingsWentBad;
+		this->Nick = tempmsg.substr(1,Offset-1);
 		tempmsg = tempmsg.substr(Offset+1);
 
 		Offset = tempmsg.find('@');
-		if(Offset == string::npos) goto ThingsWentBad;
-		this->User = tempmsg.substr(Offset);
+		if(Offset == string::npos || Offset >= MaxOffset) goto ThingsWentBad;
+		this->User = tempmsg.substr(0,Offset);
 		tempmsg = tempmsg.substr(Offset+1);
 
 
 		Offset = tempmsg.find(' ');
 		if(Offset == string::npos) goto ThingsWentBad;
-		this->Host = tempmsg.substr(Offset);
+		this->Host = tempmsg.substr(0,Offset);
 		tempmsg = tempmsg.substr(Offset+1);
 
 
@@ -145,8 +146,8 @@ void Message::ParseIncomingMessage(string msg)
 	this->HasNickUserHost = false;
 	//shit is weird so we just toss out unparsed
 
-	Offset = msg.find(" ")+1;
-	ParseParams(msg.substr(Offset));
+	//Offset = msg.find(" ")+1;
+	ParseParams(msg);
 	return;
 }
 

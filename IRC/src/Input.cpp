@@ -59,7 +59,7 @@ void Input::SendMeMsg(Message *msg)
 
 
 template<class Functor>
-bool InputCommand(Message *msg,std::vector<string> list, Functor func, unsigned int minMsgArrayCounter) {
+bool InputCommand(Message *msg,const std::vector<string> list, Functor func, unsigned int minMsgArrayCounter) {
 
 	if(StringFromStringListEqual(msg->ParameterArray[0],list))
 	{
@@ -102,39 +102,39 @@ void Input::InputCommands(Message *msg)
 			return;
 
 		std::vector<string> Close;
-		Select.push_back("Close");
-		Select.push_back("close");
-		Select.push_back("C");
-		Select.push_back("c");
+		Close.push_back("Close");
+		Close.push_back("close");
+		Close.push_back("C");
+		Close.push_back("c");
 		if(InputCommand(msg,Close,[&](){g_pMainWindow->CloseChannel(msg->ParameterArray[1]);},2))
 			return;
 
 		std::vector<string> CloseAll;
-		Select.push_back("Closeall");
-		Select.push_back("closeall");
-		Select.push_back("CloseAll");
-		Select.push_back("closeAll");
+		CloseAll.push_back("Closeall");
+		CloseAll.push_back("closeall");
+		CloseAll.push_back("CloseAll");
+		CloseAll.push_back("closeAll");
 		if(InputCommand(msg,CloseAll,[&](){g_pMainWindow->CloseAll();},1))
 			return;
 
 		std::vector<string> Copy;
-		Select.push_back("Copy");
-		Select.push_back("copy");
+		Copy.push_back("Copy");
+		Copy.push_back("copy");
 		if(InputCommand(msg,Copy,[&](){g_pMainWindow->CopyCurrentLine();},1))
 			return;
 
 		std::vector<string> Me;
-		Select.push_back("Me");
-		Select.push_back("me");
-		Select.push_back("ME");
-		Select.push_back("mE");	
+		Me.push_back("Me");
+		Me.push_back("me");
+		Me.push_back("ME");
+		Me.push_back("mE");	
 		if(InputCommand(msg,Me,[&](){SendMeMsg(msg);},2))
 			return;
 
 		std::vector<string> Quit;
-		Select.push_back("Quit");
-		Select.push_back("quit");
-		if(InputCommand(msg,Me,[&](){
+		Quit.push_back("Quit");
+		Quit.push_back("quit");
+		if(InputCommand(msg,Quit,[&](){
 				SendUnknownCommand(msg);
 				::SendMessage(g_pWindow,WM_DESTROY,NULL,NULL);
 			},1)){
@@ -142,12 +142,12 @@ void Input::InputCommands(Message *msg)
 		}
 
 		std::vector<string> ShowUserList;
-		Select.push_back("UserList");
-		Select.push_back("Userlist");
-		Select.push_back("userlist");
-		Select.push_back("ulist");
-		Select.push_back("Ulist");
-		Select.push_back("UList");
+		ShowUserList.push_back("UserList");
+		ShowUserList.push_back("Userlist");
+		ShowUserList.push_back("userlist");
+		ShowUserList.push_back("ulist");
+		ShowUserList.push_back("Ulist");
+		ShowUserList.push_back("UList");
 		if(InputCommand(msg,ShowUserList,[&](){g_pMainWindow->ShowUserList();},1))
 			return;
 

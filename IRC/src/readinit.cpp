@@ -145,7 +145,7 @@ void ReadInit::loadVars(){
         // Wenn die Datei geoeffnet werden konnte...
         // An den Anfang der Datei springen
         file.seekg(0L, std::ios::beg);
-		char *msg = new char[400];
+		char msg[400];
         while (! file.eof()){
             int sizehelper = 0;
             float heighthelper = 800;
@@ -277,7 +277,6 @@ void ReadInit::loadVars(){
             	sizehelper = 0;
             }
 */        }
-		delete msg;
     }else{
         // Wenn die Datei nicht geoeffnet werden konnte
 //        cout << "Datei \"vars.dat\" nicht gefunden." << endl;

@@ -5,11 +5,12 @@ const char *reasonString = ", reason: ";
 
 bool IncomingMessagesHandling::PingStuff(Message *msg)
 {
-	if(StringBeginEqual(msg->GetFormatedMessage(),"PING"))
+	if(StringBeginEqual(msg->ParameterArray[0],"PING"))
 	{
 		//Ping works, no need to confirm it anymore. Also fairly sure that can only be send by the server
 		//OutputMessage(msg,0);
-		msg->formatedMessage[1] = 'O';
+		msg->ParameterArray[0].replace(1,1,"O");
+		msg->MergeParameterArray();
 		appendNewLine(msg->formatedMessage);
 		send(pMainWindow->GetSocket(),msg->formatedMessage.c_str(),msg->formatedMessage.length(),0);
 		return true;
@@ -22,10 +23,10 @@ void IncomingMessagesHandling::decodeServerMessages(Message *msg)
 		{
 			//it's not a ping
 			//currently that means, just print it
-			if(!msg->ParameterArray[0].compare(RPL_NAMREPLY))
+			if(!msg->ParameterArray[1].compare(RPL_NAMREPLY))
 			{
-				string Channel = msg->ParameterArray[3];
-				for(unsigned int i = 4; i < msg->ParameterArray.size(); i++)
+				string Channel = msg->ParameterArray[4];
+				for(unsigned int i = 5; i < msg->ParameterArray.size(); i++)
 				{
 					pMainWindow->AddNick(msg->ParameterArray[i],Channel);
 				}

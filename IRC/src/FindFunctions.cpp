@@ -1,6 +1,6 @@
 #include "FindFunctions.h"
 
-bool StringFromStringListEqual(string str1,std::vector<string> strlist2)
+bool StringFromStringListEqual(string str1,const std::vector<string> strlist2)
 {
 	for(int i = 0; i < strlist2.size(); i++)
 	{
